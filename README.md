@@ -1,6 +1,8 @@
 # Wynis
-Just a powershell scripts for auditing security with BEST Practices Windows env
-You just need to run the script, it will create a directory named : AUDIT_CONF_%MACHINENAME_%DATE%
+Forked from https://github.com/Sneakysecdoggo/Wynis
+
+Powershell scripts for auditing security in accordance with the CIS Standards.
+You just need to run the script, it will create a directory named: AUDIT_CONF_%MACHINENAME_%DATE%
 
 
 ![W1](../master/Exemples/W1-ScriptOverView.png)
