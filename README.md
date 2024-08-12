@@ -7,7 +7,7 @@ Powershell scripts for auditing windows security in accordance with the CIS Stan
 You just need to run the script, it will create a directory named: AUDIT_CONF_%MACHINENAME_%DATE%
 
 
-![W1](../master/Exemples/W1-ScriptOverView.png)
+![W1](../master/Examples/W1-ScriptOverView.png)
 
 
 Actualy, the script are : 
@@ -41,56 +41,56 @@ Before running the script either you :
 
 The directory output will contain the files below:
 
-![W2](../master/Exemples/W2-FilesList.png)
+![W2](../master/Examples/W2-FilesList.png)
 
 
 -Antivirus-%COMPUTERNAME% : List installed Antivirus software
 
-![W3](../master/Exemples/W3-Antivirus.jpg)
+![W3](../master/Examples/W3-Antivirus.jpg)
 
 -APPDATA%COMPUTERNAME% : List all executable file in APPDATA directory
-![W4](../master/Exemples/W3-Appdataa.jpg)
+![W4](../master/Examples/W3-Appdataa.jpg)
 
 
 -Audit%DATE%: list the result of all CIS tests
 
-![W4](../master/Exemples/W4-OutPutExemple.jpg)
+![W4](../master/Examples/W4-OutPutExemple.jpg)
 
 -auditpolicy-%COMPUTERNAME% : audit policy configured
 
-![W5](../master/Exemples/W5-AuditConfiguration.jpg)
+![W5](../master/Examples/W5-AuditConfiguration.jpg)
 
 -firewall-rules-%COMPUTERNAME% : List all local windows firewall rules
 
-![W6](../master/Exemples/W6-FirewallRules.jpg)
+![W6](../master/Examples/W6-FirewallRules.jpg)
 
 -gpo-%COMPUTERNAME% : Gpresult for applied GPO
 
-![W10](../master/Exemples/W12-GPRESULT.jpg)
+![W10](../master/Examples/W12-GPRESULT.jpg)
 
 
 -Installed-Software-%COMPUTERNAME% : List installed software
 
-![W6](../master/Exemples/W6-InstalledSoftware.jpg)
+![W6](../master/Examples/W6-InstalledSoftware.jpg)
 
 -Listen-port-%COMPUTERNAME% : netstat with associate executable
-![W11](../master/Exemples/W11-netsat.jpg)
+![W11](../master/Examples/W11-netsat.jpg)
 -localuser-%COMPUTERNAME% : list all local users
 
 -OptionnalFeature-%COMPUTERNAME% :List all enabled optional feature
 
-![W7](../master/Exemples/W7-InstalledOptionnalFeature.jpg)
+![W7](../master/Examples/W7-InstalledOptionnalFeature.jpg)
 
 -Scheduled-task-%COMPUTERNAME% : list all scheduled task
 
-![W8](../master/Exemples/W8-SchedulTaks.jpg)
+![W8](../master/Examples/W8-SchedulTaks.jpg)
 -Service-%COMPUTERNAME% : list all service
 
-![W9](../master/Exemples/W9-ListService.jpg)
+![W9](../master/Examples/W9-ListService.jpg)
 
 -Share-%COMPUTERNAME% : list all share
 
-![W10](../master/Exemples/W10-ListService.jpg)
+![W10](../master/Examples/W10-ListService.jpg)
 
 -StartUp-%COMPUTERNAME% : check registry to identify start-up executable
 
