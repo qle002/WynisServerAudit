@@ -1,9 +1,9 @@
 # Wynis
 Forked from https://github.com/Sneakysecdoggo/Wynis
 
-Updated to the latest CIS benchmarks for Windows Server 2022 (v3.0.0), 2019 (v3.0.1), 2016 (v3.0.0), 2012R2 (v3.0.0) and 2008R2 (v3.3.0).
+Updated to the latest CIS benchmarks for Windows Server 2022 (v3.0.0), 2019 (v3.0.1), 2016 (v3.0.0), 2012R2 (v3.0.0), and 2008R2 (v3.3.0).
 
-Powershell scripts for auditing windows security in accordance with the CIS Standards.
+Powershell scripts for auditing Windows security in accordance with the CIS Standards.
 You just need to run the script, it will create a directory named: AUDIT_CONF_%MACHINENAME_%DATE%
 
 
@@ -22,12 +22,14 @@ Actually, the scripts are :
 
 - WynisWIN2022-CISv3.0.0.ps1: Auditing Windows Server 2022 with CIS Benchmarks (To improve)
 
+Scripts should work with Powershell versions 3, 4, and 5.
+
 
 # Prerequisites
 
 Before running the script either you : 
 
-    -'Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser' before running the script in your powershell console
+    -'Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser' before running the script in your Powershell console
 
     - Sign Wynis with your PKi https://devblogs.microsoft.com/scripting/hey-scripting-guy-how-can-i-sign-windows-powershell-scripts-with-an-enterprise-windows-pki-part-2-of-2/
 
