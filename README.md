@@ -10,17 +10,17 @@ You just need to run the script, it will create a directory named: AUDIT_CONF_%M
 ![W1](../master/Examples/W1-ScriptOverView.png)
 
 
-Actualy, the script are : 
+Actually, the scripts are : 
 
--WynisWIN2016DC-CISv1.0 : Auditing DC 2016 with CIS
+- WynisWIN2008R2-CISv3.3.0.ps1: Auditing Windows Server 2008R2 with CIS Benchmarks
 
--Wynis-AD-STIG : Auditing Domain Security with STIG and other security Best Practice (Work In Progress)
+- WynisWIN2012R2-CISv3.0.0_Final.ps1: Auditing Windows Server 2012R2 with CIS Benchmarks
 
--WynisO365-CIS : Auditing O365 with CIS Best Practice (Work in Progress)
+- WynisWIN2016-CISv3.0.0.ps1: Auditing Windows Server 2016 with CIS Benchmarks
 
--WynisWIN10-CIS : Auditing Win 10 with CIS Best Practice 
+- WynisWIN2019-CISv3.0.1.ps1: Auditing Windows Server 2019 with CIS Benchmarks
 
--WynisWIN2016-CIS : Auditing Win 2016 with CIS Best Practice 
+- WynisWIN2022-CISv3.0.0.ps1: Auditing Windows Server 2022 with CIS Benchmarks
 
 
 # Prerequisites
