@@ -21,7 +21,7 @@ Actually, the scripts are :
 - WynisWIN2019-CISv3.0.1.ps1: Auditing Windows Server 2019 with CIS Benchmarks (To improve)
 
 - WynisWIN2022-CISv3.0.0.ps1: Auditing Windows Server 2022 with CIS Benchmarks (To improve)
-- 
+
 
 # Prerequisites
 
