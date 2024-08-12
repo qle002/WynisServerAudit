@@ -12,16 +12,16 @@ You just need to run the script, it will create a directory named: AUDIT_CONF_%M
 
 Actually, the scripts are : 
 
-- WynisWIN2008R2-CISv3.3.0.ps1: Auditing Windows Server 2008R2 with CIS Benchmarks
+- WynisWIN2008R2-CISv3.3.0.ps1: Auditing Windows Server 2008R2 with CIS Benchmarks (To improve)
 
-- WynisWIN2012R2-CISv3.0.0_Final.ps1: Auditing Windows Server 2012R2 with CIS Benchmarks
+- WynisWIN2012R2-CISv3.0.0_Final.ps1: Auditing Windows Server 2012R2 with CIS Benchmarks (To improve)
 
-- WynisWIN2016-CISv3.0.0.ps1: Auditing Windows Server 2016 with CIS Benchmarks
+- WynisWIN2016-CISv3.0.0.ps1: Auditing Windows Server 2016 with CIS Benchmarks (To improve)
 
-- WynisWIN2019-CISv3.0.1.ps1: Auditing Windows Server 2019 with CIS Benchmarks
+- WynisWIN2019-CISv3.0.1.ps1: Auditing Windows Server 2019 with CIS Benchmarks (To improve)
 
-- WynisWIN2022-CISv3.0.0.ps1: Auditing Windows Server 2022 with CIS Benchmarks
-
+- WynisWIN2022-CISv3.0.0.ps1: Auditing Windows Server 2022 with CIS Benchmarks (To improve)
+- 
 
 # Prerequisites
 
