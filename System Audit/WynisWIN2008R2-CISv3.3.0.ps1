@@ -47,54 +47,52 @@ Write-Host "    \/  \/  |_____/|____|\___/ \___/ \___/|_|  \_\____|"  -Foregroun
 #FUNCTION                                         
 
 
-$reverveCommand=Get-Command | Where-Object { $_.name -match "Get-WSManInstance"}
-if($null -ne $reverveCommand){
-  $reverseCommandExist= $true
-}else{
-  $reverseCommandExist= $false
+$reverveCommand = Get-Command | Where-Object { $_.name -match "Get-WSManInstance"}
+if ($null -ne $reverveCommand) {
+  $reverseCommandExist = $true
+} else {
+  $reverseCommandExist = $false
 }
 # Function to reverse SID from SecPol
 Function Format-SID ($chainSID) {
-
-
- $chainSID = $chainSID -creplace '^[^\\]*=', ''
- $chainSID = $chainSID.replace("*", "")
- $chainSID = $chainSID.replace(" ", "")
- if ( $null -ne $chainSID){
- $table = @()
- $table = $chainSID.Split(",") 
-
-
- ForEach ($line in $table) { 
-  $sid = $null
-  if ($line -like "S-*") {
-   if($reverseCommandExist -eq $true){
-   $sid = Get-WSManInstance -ResourceURI "wmicimv2/Win32_SID" -SelectorSet @{SID="$line"}|Select-Object AccountName
-   $sid = $sid.AccountName
-   }
-if ( $null -eq $sid) {
-    $objSID = New-Object System.Security.Principal.SecurityIdentifier ("$line")
-    $objUser = $objSID.Translate( [System.Security.Principal.NTAccount])
-    $sid=$objUser.Value
-    if ( $sid -eq $null){
-    $objUser = New-Object System.Security.Principal.NTAccount("$line") 
-    $strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier])
-    $sid=$strSID.Value
-}
-   $outpuReverseSid += $sid + "|"
-
-  }else{
-   $outpuReverseSid += $line + "|"
-  }
- }
+  $chainSID = $chainSID -creplace '^[^\\]*=', ''
+  $chainSID = $chainSID.replace("*", "")
+  $chainSID = $chainSID.replace(" ", "")
  
- }
- return $outpuReverseSid
-}else {
-$outpuReverseSid += No One 
- return $outpuReverseSid
+  if ($null -ne $chainSID) {
+    $table = @()
+    $table = $chainSID.Split(",")
+ 
+    ForEach ($line in $table) { 
+      $sid = $null
+      
+      if ($line -like "S-*") {
+        if($reverseCommandExist -eq $true){
+          $sid = Get-WSManInstance -ResourceURI "wmicimv2/Win32_SID" -SelectorSet @{SID="$line"}|Select-Object AccountName
+          $sid = $sid.AccountName
+        }
 
-}
+        if ( $null -eq $sid) {
+          $objSID = New-Object System.Security.Principal.SecurityIdentifier ("$line")
+          $objUser = $objSID.Translate( [System.Security.Principal.NTAccount])
+          $sid = $objUser.Value
+        
+          if ( $sid -eq $null){
+            $objUser = New-Object System.Security.Principal.NTAccount("$line") 
+            $strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier])
+            $sid = $strSID.Value
+          }
+          $outpuReverseSid += $sid + "|"
+        } else {
+          $outpuReverseSid += $line + "|"
+        }
+      }
+    }
+  return $outpuReverseSid
+  } else {
+    $outpuReverseSid += No One 
+    return $outpuReverseSid
+  }
 }
 
 
@@ -107,8 +105,7 @@ function StringArrayToList($StringArray) {
       $Result += $Value
     }
     return $Result
-  }
-  else {
+  } else {
     return ""
   }
 }
@@ -169,11 +166,11 @@ auditpol.exe /get /Category:* > $auditconfigfile
 
 #Dump some Windows registry 
 Write-Host "#########>Dump Windows Registry <#########" -ForegroundColor DarkGreen
-$auditregHKLM= "./auditregistry-HKLMicrosoft" + "-" + "$OSName" + ".txt"
+$auditregHKLM = "./auditregistry-HKLMicrosoft" + "-" + "$OSName" + ".txt"
 reg export "HKLM\SOFTWARE\Microsoft\" "$auditregHKLM"
-$auditregHKLM= "./auditregistry-HKLMCUrrentControlSet" + "-" + "$OSName" + ".txt"
+$auditregHKLM = "./auditregistry-HKLMCUrrentControlSet" + "-" + "$OSName" + ".txt"
 reg export "HKLM\SYSTEM\CurrentControlSet" "$auditregHKLM"
-$auditregHKLM= "./auditregistry-HKLMPolicies" + "-" + "$OSName" + ".txt"
+$auditregHKLM = "./auditregistry-HKLMPolicies" + "-" + "$OSName" + ".txt"
 reg export "HKLM\SOFTWARE\Policies" "$auditregHKLM"
 
 #Take Firewall Configuration
@@ -386,7 +383,6 @@ if ($resultsAV.count -ge 1) {
 }
 
 
-
 #Audit share present on the server 
 
 Write-Host "#########>Take Share Information<#########" -ForegroundColor DarkGreen
@@ -408,17 +404,10 @@ $listShare = Get-SmbShare
   
   
 foreach ( $share in $listShare) {
-  
-  
   $droits = Get-SmbShareAccess $share.name
   
-  
   foreach ( $droit in $droits) {
-  
-  
     $tableShare += addShare -NS $share.name -CS $share.path -US $droit.AccountName -TS $droit.AccessControlType -NDS $droit.AccessRight
-  
-  
   }
 }
 
@@ -427,70 +416,59 @@ $tableShare | ConvertTo-CSV -NoTypeInformation -Delimiter ";" | Set-Content $fil
 #Audit Appdata 
 Write-Host "#########>Take Appdata Information<#########" -ForegroundColor DarkGreen
 $pathProfiles = (Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList").ProfilesDirectory
-  
-  
-$presentProfile = Get-ChildItem $pathProfiles 
+
+
+$presentProfile = Get-ChildItem -Path $pathProfiles 
   
 $resultAPP = @()
 $filenameAPP = "./APPDATA" + "$OSName" + ".csv"
   
   
-foreach ( $profil in $presentProfile) {
-  
-  $verifAppdata = Test-Path $pathProfiles\$profil\Appdata
+foreach ($profil in $presentProfile) {
+  $verifAppdata = Test-Path -Path $pathProfiles\$profil\Appdata
   
   if ($verifAppdata -eq $true) {
+    $result = Get-ChildItem -Path $pathProfiles\$profil\Appdata -Recurse -Include *.bat, *.exe, *.ps1, *.ps1xml, *.PS2, *.PS2XML, *.psc1, *.PSC2, *.msi, *.py, *.pif, *.MSP , *.COM, *.SCR, *.hta, *.CPL, *.MSC, *.JAR, *.VB, *.VBS, *.VBE, *.JS, *.JSE, *.WS, *.wsf, *.wsc, *.wsh, *.msh, *.MSH1, *.MSH2, *.MSHXML, *.MSH1XML, *.MSH2XML, *.scf, *.REG, *.INF   | Select-Object Name, Directory, Fullname 
   
-    $result = Get-ChildItem $pathProfiles\$profil\Appdata -Recurse -Include *.bat, *.exe, *.ps1, *.ps1xml, *.PS2, *.PS2XML, *.psc1, *.PSC2, *.msi, *.py, *.pif, *.MSP , *.COM, *.SCR, *.hta, *.CPL, *.MSC, *.JAR, *.VB, *.VBS, *.VBE, *.JS, *.JSE, *.WS, *.wsf, *.wsc, *.wsh, *.msh, *.MSH1, *.MSH2, *.MSHXML, *.MSH1XML, *.MSH2XML, *.scf, *.REG, *.INF   | Select-Object Name, Directory, Fullname 
-  
-  foreach ($riskyfile in $result) {
-
-$signature = Get-FileHash -Algorithm SHA256 $riskyfile.Fullname
-
-
-
-  $resultApptemp = [PSCustomObject]@{
-                            Name  = $riskyfile.Name
-                            Directory = $riskyfile.Directory
-                            Path = $riskyfile.Fullname
-							              Signature = $signature.Hash
-                            Profil= $profil.name
-							
+    foreach ($riskyfile in $result) {
+      $signature = Get-FileHash -Algorithm SHA256 $riskyfile.Fullname
+      $resultApptemp = [PSCustomObject]@{
+                          Name  = $riskyfile.Name
+                          Directory = $riskyfile.Directory
+                          Path = $riskyfile.Fullname
+                          Signature = $signature.Hash
+                          Profil= $profil.name
                         }
-
-$resultAPP +=$resultApptemp
-
-
-  }
+      $resultAPP +=$resultApptemp
+    }
   }
 }
- $resultAPP
 
-    $resulatCount = $resultAPP |Measure-Object 
-    $resulatCount = $resulatCount.Count
-  
-  
-  
-    if ( $resulatCount -gt 0) {
-      $resultAPP | Export-Csv -NoTypeInformation $filenameAPP
-  
-      
-    }
-  
+$resultAPP
+$resulatCount = $resultAPP |Measure-Object 
+$resulatCount = $resulatCount.Count
+    
+if ($resulatCount -gt 0) {
+  $resultAPP | Export-Csv -NoTypeInformation $filenameAPP
+}
+
 
   
 #Check feature and optionnal who are installed 
 Write-Host "#########>Take Feature and Optionnal Feature Information<#########" -ForegroundColor DarkGreen
+
 $filenameFeature = "./Feature-" + "$OSName" + ".txt"
 $filenameOptionnalFeature = "./OptionnalFeature-" + "$OSName" + ".txt" 
+
 if ( $OSversion -match "Server") {
   #Import serverManger
   import-module servermanager
   
-  Get-WindowsFeature | where-object {$_.Installed -eq $True} |Format-Table * -Autosize >> ./$filenameFeature 
-  
+  Get-WindowsFeature | Where-Object {$_.Installed -eq $True} |Format-Table * -Autosize >> ./$filenameFeature   
 }
-Get-WindowsOptionalFeature -Online | where-object {$_.State -eq "Enabled"} |Format-Table * -Autosize >> $filenameOptionnalFeature
+
+Get-WindowsOptionalFeature -Online | Where-Object {$_.State -eq "Enabled"} |Format-Table * -Autosize >> $filenameOptionnalFeature
+
 #Check installed software
 Write-Host "#########>Take Software Information<#########" -ForegroundColor DarkGreen
 $filenameInstall = "./Installed-software- " + "$OSName" + ".csv"
@@ -518,32 +496,28 @@ Get-WmiObject win32_service | Select-Object Name, DisplayName, State, StartName,
 
 #Check Scheduled task
 Write-Host "#########>Take Scheduled task Information<#########" -ForegroundColor DarkGreen
+
 $filenamettache = "./Scheduled-task- " + "$OSName" + ".csv"
 $tabletache = Get-ScheduledTask |Select-Object -Property *
 $resultTask= @()
+
 foreach ($tache in $tabletache) {
-$taskactions = Get-ScheduledTask $tache.Taskname |Select-Object -ExpandProperty Actions
+  $taskactions = Get-ScheduledTask $tache.Taskname |Select-Object -ExpandProperty Actions
 
- foreach ( $taskaction in $taskactions ) {
-
-
-$resultTasktemp = [PSCustomObject]@{
-                            Task_name = $tache.Taskname
-                            Task_URI = $tache.URI
-                            Task_state = $tache.State
-                            Task_Author = $tache.Author
-							Task_Description = $tache.Description
-                            Task_action = $taskaction.Execute 
-                            Task_action_Argument = $taskaction.Arguments
-                            Task_Action_WorkingDirectory = $taskaction.WorkingDirectory
-							
-                        }
-
-$resultTask += $resultTasktemp
-
- }
+  foreach ( $taskaction in $taskactions ) {
+    $resultTasktemp = [PSCustomObject]@{
+                                Task_name = $tache.Taskname
+                                Task_URI = $tache.URI
+                                Task_state = $tache.State
+                                Task_Author = $tache.Author
+                                Task_Description = $tache.Description
+                                Task_action = $taskaction.Execute 
+                                Task_action_Argument = $taskaction.Arguments
+                                Task_Action_WorkingDirectory = $taskaction.WorkingDirectory
+                              }
+    $resultTask += $resultTasktemp
   }
-  
+}
 
 $resultTask
 
@@ -551,12 +525,13 @@ $resultTask | Export-Csv -NoTypeInformation $filenamettache
 
 #check net accounts intel
 Write-Host "#########>Take Service Information<#########" -ForegroundColor DarkGreen
+
 $filenameNetAccount = "./AccountsPolicy-" + "$OSName" + ".txt"
 net accounts > $filenameNetAccount
 
-
 #Check listen port 
 Write-Host "#########>Take Port listening Information<#########" -ForegroundColor DarkGreen
+
 $filenamePort = "./Listen-port- " + "$OSName" + ".csv"
 $listport = Get-NetTCPConnection | Select-Object LocalAddress, LocalPort, State, OwningProcess
 "LocalAddress;LocalPort;State;OwningProcess;Path" > $filenamePort
@@ -570,33 +545,26 @@ foreach ($port in $listport) {
 # Get-WmiObject -Class Win32_UserAccount -Filter "LocalAccount=True"
 $listlocaluser = Get-WmiObject -Class Win32_UserAccount
 
-foreach ( $user in $listlocaluser) {
-
-
+foreach ($user in $listlocaluser) {
   if ( $user.sid -like "*-500") {
-
     $nomcompteadmin = $user.Name
-
+    
     $statutcompteadmin = $user.Disabled
     if ($statutcompteadmin -eq $true) {
       $adminstate = "disable"
-    }
-    else {
+    } else {
       $adminstate = "enable"
     }
-  }
-  elseif ( $user.sid -like "*-501") {
-    $nomcompteguest = $user.Name
-    $statutcompteguest = $user.Disabled
-    if ($statutcompteguest -eq $true) {
-      $gueststate = "disable"
+  } elseif ($user.sid -like "*-501") {
+      $nomcompteguest = $user.Name
+      $statutcompteguest = $user.Disabled
+      
+      if ($statutcompteguest -eq $true) {
+        $gueststate = "disable"
+      } else {
+        $gueststate = "enable"
+      }
     }
-    else {
-      $gueststate = "enable"
-    }
-
-  }
-
 }
 
 $listlocaluser > "localuser-$OSName.txt"
