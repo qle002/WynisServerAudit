@@ -575,15 +575,15 @@ $listlocaluser > "localuser-$OSName.txt"
 Write-Host "#########>Take Startup Registry Information<#########" -ForegroundColor DarkGreen
 $filenameStartup = "./Startup- " + "$OSName" + ".txt"
 "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" >> $filenameStartup
-Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"|Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
+Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" | Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
 "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" >> $filenameStartup
-Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce"|Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
+Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce" | Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
 "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Windows" >> $filenameStartup
-Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows"|Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
+Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows" | Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
 "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" >> $filenameStartup
-Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run"|Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
+Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run" | Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
 "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce" >> $filenameStartup
-Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce"|Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
+Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce" | Select-Object * -exclude PSPath,PSParentPath, PSChildName, PSProvider, PSDrive >> $filenameStartup
 
 
 
@@ -659,7 +659,7 @@ $chaine = $null
 $traitement = $null
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Minimum password length' is set to 14 or more character(s)'" + ";"
-$traitement = Get-Content $seceditfile |Select-String "MinimumPasswordLength" | Select-Object -First 1
+$traitement = Get-Content $seceditfile |Select-String "MinimumPasswordLength"
 
 if ($checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -2957,7 +2957,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Allow LocalSystem NULL session fallback' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"|Select-Object AllowNullSessionFallback
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" | Select-Object -ExpandProperty AllowNullSessionFallback
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -2979,7 +2979,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network Security: Allow PKU2U authentication requests to this computer to use online identities' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\pku2u"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\pku2u"|Select-Object AllowOnlineID
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\pku2u" | Select-Object -ExpandProperty AllowOnlineID
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3001,7 +3001,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Configure encryption types allowed for Kerberos' is set to 'AES128_HMAC_SHA1, AES256_HMAC_SHA1, Future encryption types'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters"|Select-Object SupportedEncryptionTypes
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" | Select-Object -ExpandProperty SupportedEncryptionTypes
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3023,7 +3023,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Do not store LAN Manager hash value on next password change' is set to 'Enabled' " + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"|Select-Object NoLMHash
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa" | Select-Object -ExpandProperty NoLMHash
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3045,7 +3045,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Force logoff when logon hours expire' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters"|Select-Object EnableForcedLogOff
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters" | Select-Object -ExpandProperty EnableForcedLogOff
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3067,7 +3067,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: LAN Manager authentication level' is set to 'Send NTLMv2 response only. Refuse LM & NTLM'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"|Select-Object LmCompatibilityLevel
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa" | Select-Object -ExpandProperty LmCompatibilityLevel
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3089,7 +3089,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: LDAP client signing requirements' is set to 'Negotiate signing' or higher" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LDAP"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LDAP"|Select-Object LDAPClientIntegrity
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LDAP" | Select-Object -ExpandProperty LDAPClientIntegrity
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3110,7 +3110,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Minimum session security for NTLM SSP based (including secure RPC) clients' is set to 'Require NTLMv2 session security, Require 128-bit encryption' (Value must be 537395200)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"|Select-Object NTLMMinClientSec
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" | Select-Object -ExpandProperty NTLMMinClientSec
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3132,7 +3132,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Minimum session security for NTLM SSP based (including secure RPC) servers' is set to 'Require NTLMv2 session security, Require 128-bit encryption' (Value must be 537395200)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"|Select-Object NTLMMinServerSec
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" | Select-Object -ExpandProperty NTLMMinServerSec
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3154,7 +3154,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Restrict NTLM: Audit Incoming NTLM Traffic' is set to 'Enable auditing for all accounts' " + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"|Select-Object AuditReceivingNTLMTraffic
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" | Select-Object -ExpandProperty AuditReceivingNTLMTraffic
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3176,7 +3176,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Restrict NTLM: Audit NTLM authentication in this domain' is set to 'Enable all' (DC only)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"|Select-Object AuditNTLMInDomain
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" | Select-Object -ExpandProperty AuditNTLMInDomain
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3198,7 +3198,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Network security: Restrict NTLM: Outgoing NTLM traffic to remote servers' is set to 'Audit all' or higher" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"|Select-Object RestrictSendingNTLMTraffic
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" | Select-Object -ExpandProperty RestrictSendingNTLMTraffic
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3224,7 +3224,7 @@ $id = "SHUT" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Shutdown: Allow system to be shut down without having to log on' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object ShutdownWithoutLogon
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty ShutdownWithoutLogon
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3250,7 +3250,7 @@ $id = "SO" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'System objects: Require case insensitivity for non-Windows subsystems' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"|Select-Object ObCaseInsensitive
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel" | Select-Object -ExpandProperty ObCaseInsensitive
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3272,7 +3272,7 @@ $id = "SO" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'System objects: Strengthen default permissions of internal system objects (e.g. Symbolic Links)' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"|Select-Object ProtectionMode
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager" | Select-Object -ExpandProperty ProtectionMode
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3297,7 +3297,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Admin Approval Mode for the Built-in Administrator account' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object FilterAdministratorToken
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty FilterAdministratorToken
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3319,7 +3319,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Behavior of the elevation prompt for administrators in Admin Approval Mode' is set to 'Prompt for consent on the secure desktop' or higher" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object ConsentPromptBehaviorAdmin
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty ConsentPromptBehaviorAdmin
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3341,7 +3341,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Behavior of the elevation prompt for standard users' is set to 'Automatically deny elevation requests'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object ConsentPromptBehaviorUser
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty ConsentPromptBehaviorUser
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3363,7 +3363,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Detect application installations and prompt for elevation' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object EnableInstallerDetection
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty EnableInstallerDetection
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3385,7 +3385,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Only elevate UIAccess applications that are installed in secure locations' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object EnableSecureUIAPaths
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty EnableSecureUIAPaths
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3407,7 +3407,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Run all administrators in Admin Approval Mode' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object EnableLUA
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty EnableLUA
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3429,7 +3429,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Switch to the secure desktop when prompting for elevation' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object PromptOnSecureDesktop
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty PromptOnSecureDesktop
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3451,7 +3451,7 @@ $id = "UAC" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'User Account Control: Virtualize file and registry write failures to per-user locations' is set to 'Enabled' " + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object EnableVirtualization
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty EnableVirtualization
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3477,7 +3477,7 @@ $id = "SS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Print Spooler (Spooler)' is set to 'Disabled' (DC only)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"|Select-Object Start
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler" | Select-Object -ExpandProperty Start
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3499,7 +3499,7 @@ $id = "SS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L2) Ensure 'Print Spooler (Spooler)' is set to 'Disabled' (MS only)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"|Select-Object Start
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler" | Select-Object -ExpandProperty Start
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3866,7 +3866,7 @@ $id = "WFPPUBP" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Windows Firewall: Public: Settings: Apply local firewall rules' is set to 'No'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile"|Select-Object AllowLocalPolicyMerge
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile" | Select-Object -ExpandProperty AllowLocalPolicyMerge
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -3887,7 +3887,7 @@ $exist = $null
 $id = "WFPPUBP" + "$indextest"
 $chaine = "$id" + ";" + "(L1) Ensure 'Windows Firewall: Public: Settings: Apply local connection security rules' is set to 'No'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile"|Select-Object AllowLocalIPsecPolicyMerge
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile" | Select-Object -ExpandProperty AllowLocalIPsecPolicyMerge
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4647,7 +4647,7 @@ $id = "PA" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Prevent enabling lock screen camera' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"|Select-Object NoLockScreenCamera
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization" | Select-Object -ExpandProperty NoLockScreenCamera
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4668,7 +4668,7 @@ $id = "PA" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Prevent enabling lock screen slide show' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"|Select-Object NoLockScreenSlideshow
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization" | Select-Object -ExpandProperty NoLockScreenSlideshow
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4689,7 +4689,7 @@ $id = "PA" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Allow users to enable online speech recognition services' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"|Select-Object AllowInputPersonalization
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization" | Select-Object -ExpandProperty AllowInputPersonalization
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4711,7 +4711,7 @@ $id = "PA" + "$indextest"
 
 $chaine = "$id" + ";" + "(L2) Ensure 'Allow Online Tips' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"|Select-Object AllowOnlineTips
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Select-Object -ExpandProperty AllowOnlineTips
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4736,7 +4736,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Apply UAC restrictions to local accounts on network logons' is set to 'Enabled' (MS only)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"|Select-Object LocalAccountTokenFilterPolicy
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -ExpandProperty LocalAccountTokenFilterPolicy
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4757,7 +4757,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Configure RPC packet level privacy setting for incoming connections' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print"|Select-Object RpcAuthnLevelPrivacyEnabled
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print" | Select-Object -ExpandProperty RpcAuthnLevelPrivacyEnabled
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4778,7 +4778,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Configure SMB v1 client driver' is set to 'Enabled: Disable driver (recommended)' (Value must be 4)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10"|Select-Object Start
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10" | Select-Object -ExpandProperty Start
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4800,7 +4800,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Configure SMB v1 server' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"|Select-Object SMB1
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" | Select-Object -ExpandProperty SMB1
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4822,7 +4822,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Enable Certificate Padding' is set to 'Enabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography\Wintrust\Config"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography\Wintrust\Config"|Select-Object EnableCertPaddingCheck
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography\Wintrust\Config" | Select-Object -ExpandProperty EnableCertPaddingCheck
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4844,7 +4844,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Enable Structured Exception Handling Overwrite Protection (SEHOP)' is set to 'Enabled' (Value must be 0)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"|Select-Object DisableExceptionChainValidation
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" | Select-Object -ExpandProperty DisableExceptionChainValidation
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4865,7 +4865,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'LSA Protection' is set to 'Enabled' " + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"|Select-Object RunAsPPL
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa" | Select-Object -ExpandProperty RunAsPPL
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4886,7 +4886,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'NetBT NodeType configuration' is set to 'Enabled: P-node (recommended)' (Value must be 2)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"|Select-Object NodeType
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" | Select-Object -ExpandProperty NodeType
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4907,7 +4907,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'WDigest Authentication' is set to 'Disabled'" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest"|Select-Object UseLogonCredential
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest" | Select-Object -ExpandProperty UseLogonCredential
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4928,7 +4928,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'MSS: (AutoAdminLogon) Enable Automatic Logon' is set to 'Disabled' (Value must be 0 or empty)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"|Select-Object AutoAdminLogon
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" | Select-Object -ExpandProperty AutoAdminLogon
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4950,7 +4950,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'MSS: (DisableIPSourceRouting IPv6) IP source routing protection level' is set to 'Enabled: Highest protection, source routing is completely disabled' (Value must be 2)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"|Select-Object DisableIPSourceRouting
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" | Select-Object -ExpandProperty DisableIPSourceRouting
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4972,7 +4972,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'MSS: (DisableIPSourceRouting) IP source routing protection level' is set to 'Enabled: Highest protection, source routing is completely disabled' (Value must be 2)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"|Select-Object DisableIPSourceRouting
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" | Select-Object -ExpandProperty DisableIPSourceRouting
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -4995,7 +4995,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'MSS: (EnableICMPRedirect) Allow ICMP redirects to override OSPF generated routes' is set to 'Disabled' " + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"|Select-Object EnableICMPRedirect
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" | Select-Object -ExpandProperty EnableICMPRedirect
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
@@ -5018,7 +5018,7 @@ $id = "MSSG" + "$indextest"
 
 $chaine = "$id" + ";" + "(L2) Ensure 'MSS: (KeepAliveTime) How often keep-alive packets are sent in milliseconds' is set to 'Enabled: 300,000 or 5 minutes' (Value must be 300000)" + ";"
 $exist = Test-Path -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
-$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"|Select-Object KeepAliveTime
+$traitement = Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" | Select-Object -ExpandProperty KeepAliveTime
 
 if ($exist -eq $true -and $checkConditions -notcontains $traitement) {
   $traitement = $traitement
