@@ -7848,12 +7848,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the ScreenSaveActives property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty ScreenSaveActives
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -7884,12 +7886,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the "SCRNSAVE.EXE" property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty "SCRNSAVE.EXE"
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -7919,12 +7923,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the ScreenSaverIsSecure property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty ScreenSaverIsSecure
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -7955,12 +7961,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the ScreenSaveTimeOut property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty ScreenSaveTimeOut
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -8000,6 +8008,8 @@ foreach ($sid in $sidPaths) {
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -8039,6 +8049,8 @@ foreach ($sid in $sidPaths) {
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -8074,6 +8086,8 @@ foreach ($sid in $sidPaths) {
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -8107,12 +8121,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the NoInplaceSharing property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty NoInplaceSharing
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -8146,12 +8162,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the AlwaysInstallElevated property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty AlwaysInstallElevated
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
@@ -8185,12 +8203,14 @@ foreach ($sid in $sidPaths) {
 
     # Check if the registry path exists
     if (Test-Path -Path $regPath) {
-        # Try to get the NoToastApplicationNotificationOnLockScreen property
+        # Try to get the PreventCodecDownload property
         $traitementForSid = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty PreventCodecDownload
 
         # Check if traitementForSid is null, "Not Configured", or "Not Defined"
         if ($checkConditions -notcontains $traitementForSid) {
             $traitementForSid = $traitementForSid
+        } else {
+          $traitementForSid = "Not Configured / Check Manually"
         }
     } else {
         $traitementForSid = "Not Configured / Check Manually"
