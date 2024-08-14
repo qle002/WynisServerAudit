@@ -300,12 +300,12 @@ $antivirusServices = @(
     "PccNTMon",                 # Trend Micro Security
     "PccSvcFactory",            # Trend Micro Security
     "ds_agent",                 # Trend Micro Security
-    "ds_client",                 # Trend Micro Security
+    "ds_client",                # Trend Micro Security
     "CrowdStrike",       # CrowdStrike
     "csfalconservice",   # CrowdStrike Falcon
     "MBAMService",       # Malwarebytes Anti-Malware Service
     "MBAMTray",          # Malwarebytes Tray Application
-    "MBAMWebProtection" # Malwarebytes Web Protection Service
+    "MBAMWebProtection"  # Malwarebytes Web Protection Service
 )
 
 # Define false positive keywords
@@ -318,8 +318,15 @@ foreach ($reg in $regPathList) {
     
     foreach ($subkey in $key) {
         # Get properties of each subkey
-        $subkeyProps = Get-ItemProperty -Path $subkey.PSPath -ErrorAction SilentlyContinue | Select-Object -Property DisplayName, DisplayVersion, Comments
+        $subkeyProps = Get-ItemProperty -Path $subkey.PSPath -ErrorAction SilentlyContinue | Select-Object -Property DisplayName, DisplayVersion, Comments, InstallDate
         # $subkeyProps
+
+        # Convert InstallDate to a datetime object if it exists
+        $installTimestamp = $null
+        if ($subkeyProps.InstallDate) {
+            $installTimestamp = Get-Date -Year $subkeyProps.InstallDate.Substring(0,4) -Month $subkeyProps.InstallDate.Substring(4,2) -Day $subkeyProps.InstallDate.Substring(6,2)
+        }
+
         # Check for security-related keywords in DisplayName or Comments
         if (($subkeyProps.DisplayName -match $antivirusKeywords -or $subkeyProps.Comments -match $antivirusKeywords) -and !($subkeyProps.DisplayName -match $falsePositiveAntivirus)) {
             # Initialize status variable
@@ -342,6 +349,7 @@ foreach ($reg in $regPathList) {
                 Version  = $subkeyProps.DisplayVersion
                 Status   = $status
                 Comments = $subkeyProps.Comments
+                InstallTimestamp = $installTimestamp
             }
         }
     }
@@ -350,17 +358,37 @@ foreach ($reg in $regPathList) {
 # Check if Windows Defender is installed and running
 $defenderService = Get-Service -Name "WinDefend" -ErrorAction SilentlyContinue
 if ($defenderService -and $defenderService.Status -eq 'Running') {
-    $defenderVersion = (Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Signature Updates" -ErrorAction SilentlyContinue).AVSignatureVersion
-    Write-Output "Windows Defender is running, version: $defenderVersion"
-    $resultsAV += [PSCustomObject]@{
-        Product  = "Windows Defender"
-        Version  = $defenderVersion
-        Status  = $defenderService.Status
-        Comments = "Built-in Windows antivirus solution"
+  # Retrieve the InstallTime from the registry  
+  $installTimeRaw = (Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender" -ErrorAction SilentlyContinue).InstallTime
+
+  # Convert the byte array to an Int64 (64-bit integer)
+  $installTimeInt64 = [BitConverter]::ToInt64($installTimeRaw, 0)
+
+  # Convert the Int64 value to a DateTime object
+  $installTimeConverted = [System.DateTime]::FromFileTime($installTimeInt64)
+
+  $defenderVersion = (Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Signature Updates" -ErrorAction SilentlyContinue).AVSignatureVersion
+  Write-Output "Windows Defender is running, version: $defenderVersion"
+  $resultsAV += [PSCustomObject]@{
+      Product  = "Windows Defender"
+      Version  = $defenderVersion
+      Status  = $defenderService.Status
+      Comments = "Built-in Windows antivirus solution"
+      InstallTimestamp = $installTimeConverted
     }
 } else {
     # Check the status of Windows Defender Antivirus on Windows Server
     $defenderStatus = Get-MpComputerStatus -ErrorAction SilentlyContinue
+
+    # Retrieve the InstallTime from the registry  
+    $installTimeRaw = (Get-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender" -ErrorAction SilentlyContinue).InstallTime
+
+    # Convert the byte array to an Int64 (64-bit integer)
+    $installTimeInt64 = [BitConverter]::ToInt64($installTimeRaw, 0)
+
+    # Convert the Int64 value to a DateTime object
+    $installTimeConverted = [System.DateTime]::FromFileTime($installTimeInt64)
+
     if ($defenderStatus) {
         Write-Output "Windows Defender status found, version: $($defenderStatus.AVSignatureVersion)"
         $resultsAV += [PSCustomObject]@{
@@ -368,6 +396,7 @@ if ($defenderService -and $defenderService.Status -eq 'Running') {
             Version  = $defenderStatus.AntispywareSignatureVersion
             Status   = $defenderService.Status
             Comments = "Built-in Windows antivirus solution"
+            InstallTimestamp = $installTimeConverted
         }
     } else {
         Write-Output "Windows Defender not detected"
@@ -8456,7 +8485,7 @@ $id = "MEUE" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Enable screen saver' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8494,7 +8523,7 @@ $id = "MEUE" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Password protect the screen saver' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8532,7 +8561,7 @@ $id = "MEUE" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Screen saver timeout' is set to 'Enabled: 900 seconds or fewer, but not 0'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8573,7 +8602,7 @@ $id = "NOTI" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Turn off toast notifications on the lock screen' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8614,7 +8643,7 @@ $id = "ICS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L2) Ensure 'Turn off Help Experience Improvement Program' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8655,7 +8684,7 @@ $id = "AM" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Do not preserve zone information in file attachments' is set to 'Disabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8692,7 +8721,7 @@ $id = "AM" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Notify antivirus programs when opening attachments' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8733,7 +8762,7 @@ $id = "NS" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Prevent users from sharing files within their profile.' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8774,7 +8803,7 @@ $id = "WI" + "$indextest"
 
 $chaine = "$id" + ";" + "(L1) Ensure 'Always install with elevated privileges' is set to 'Disabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
@@ -8815,7 +8844,7 @@ $id = "PB" + "$indextest"
 
 $chaine = "$id" + ";" + "(L2) Ensure 'Prevent Codec Download' is set to 'Enabled'" + ";"
 
-# Get all SID paths under HKEY_USERS
+# Get all SID paths under HKEY_USERS that match S-1-5-21-*
 $sidPaths = Get-ChildItem -Path "Registry::HKEY_USERS" | Where-Object { $_.PSChildName -match '^S-1-5-21-' }
 
 foreach ($sid in $sidPaths) {
